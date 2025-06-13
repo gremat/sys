@@ -740,7 +740,7 @@ func Ftruncate(fd Handle, length int64) (err error) {
 func Gettimeofday(tv *Timeval) (err error) {
 	var ft Filetime
 	GetSystemTimeAsFileTime(&ft)
-	*tv = NsecToTimeval(ft.Nanoseconds())
+	*tv = ft.ToTimeval()
 	return nil
 }
 
@@ -773,8 +773,8 @@ func Utimes(path string, tv []Timeval) (err error) {
 		return e
 	}
 	defer CloseHandle(h)
-	a := NsecToFiletime(tv[0].Nanoseconds())
-	w := NsecToFiletime(tv[1].Nanoseconds())
+	a := tv[0].ToFiletime()
+	w := tv[1].ToFiletime()
 	return SetFileTime(h, nil, &a, &w)
 }
 
